@@ -3,16 +3,9 @@
     <string name="nav_header_desc">TODO</string>
     <string name="nav_header_title">Ammar</string>
     <string name="nav_header_title_toolbar">Toolbar</string>
-    <string name="nav_camera_rest_timer">00:30</string>
-
-
-    <string name="Home">Dashboard</string>
-    <string name="Projects">Projects</string>
-    <string name="Feed">Feed</string>
     <string name="error">Error</string>
     <string name="success">Success</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="calculator">Calculators</string>
     <string name="please_enter_valid_email_address">Please enter valid email address</string>
     <string name="please_enter_valid_year">Please enter valid year</string>
     <string name="please_enter_valid_account_number">Please enter valid account number</string>
@@ -21,5 +14,16 @@
     <string name="preference_file_key">com.app.bank_al_habib.PREFERENCE_FILE_KEY</string>
     <string name="this_field_is_required">This field is required.</string>
 
+
+    <string name="nav_camera_rest_timer">00:30</string>
+
+    <string name="nav_question_q1">Question number 1</string>
+    <string name="nav_question_q1_question">Why are you the right person for the job?</string>
+    <string name="nav_question_start_recording">Record your answer</string>
+
+
+    <string name="nav_rec_completed_submit_text">Answer recorded! Do you want to answer again or proceed?</string>
+    <string name="nav_rec_completed_redo">Redo (%1$d)</string>
+    <string name="nav_rec_completed_continue">Continue</string>
 
 </resources>

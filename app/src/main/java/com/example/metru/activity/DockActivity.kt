@@ -224,4 +224,17 @@ abstract class DockActivity : DaggerAppCompatActivity(), ProgressIndicator {
         snackBarView.show()
     }
 
+
+    // AMMAR - Method to format countdown time to display it properly and to turn text red when there are less than 10 secs left
+    fun countDownFormatting(context: Context, millisUntilFinished: Long, textView: TextView) {
+        val secondsRemaining = millisUntilFinished / 1000
+        val minutes = secondsRemaining / 60
+        val seconds = secondsRemaining % 60
+        val formattedTime = String.format("%02d:%02d", minutes, seconds)
+        if (seconds <= 10) {
+            textView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark))
+        }
+        textView.text = formattedTime
+    }
+
 }

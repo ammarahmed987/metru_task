@@ -1,4 +1,4 @@
-package com.example.metru.fragment.blankFragment
+package com.example.metru.fragment
 
 import android.Manifest
 import com.example.metru.R
@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
@@ -23,7 +22,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.metru.activity.MainActivity
 import com.example.metru.base.BaseDockFragment
+import com.example.metru.base.ClickListener
+import com.example.metru.constant.Constants
 import com.example.metru.databinding.FragmentCameraBinding
+import com.example.metru.fragment.dialogs.QuestionDialogFragment
+import com.example.metru.fragment.dialogs.RecordingCompletedDialogFragment
 import com.google.common.util.concurrent.ListenableFuture
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -36,13 +39,15 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CameraFragment : BaseDockFragment() {
+class CameraFragment : BaseDockFragment(), ClickListener {
 
     private lateinit var binding: FragmentCameraBinding
     private lateinit var service: ExecutorService
     private var recording: Recording? = null
     private var videoCapture: VideoCapture<Recorder>? = null
     private var cameraFacing = CameraSelector.LENS_FACING_FRONT
+    private var isInitialCountDownRunning = false
+    private var redoLeft = 1
 //    private val permissionRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
 //        if (isGranted) {
 //            startCamera(cameraFacing)
@@ -56,8 +61,9 @@ class CameraFragment : BaseDockFragment() {
         // Inflate the layout for this fragment
         initView()
 
-        // AMMAR - Here we start the initial countdown
-        countdownTimerFiveTillZero.start()
+        // AMMAR - Here we show the question
+        val showQuestion = QuestionDialogFragment(this)
+        showQuestion.show(childFragmentManager, Constants.SHOW_DIALOG)
 
         return binding.root
     }
@@ -89,7 +95,10 @@ class CameraFragment : BaseDockFragment() {
                     captureVideo()
                 } else {
 //                    startCaptureVideo()
-                    countdownTimerFiveTillZero.start()
+                    if (!isInitialCountDownRunning) {
+                        countdownTimerFiveTillZero.start()
+                        isInitialCountDownRunning = true
+                    }
                 }
             }
             it.flipCameraButton.setOnClickListener {
@@ -151,11 +160,13 @@ class CameraFragment : BaseDockFragment() {
             binding.tvFiveToZeroTimer.text = (millisUntilFinished / 1000).toString()
             binding.tvFiveToZeroTimer.visibility = View.VISIBLE
             binding.imgMask.visibility = View.VISIBLE
+            binding.captureButton.visibility = View.GONE
         }
 
         override fun onFinish() {
             binding.tvFiveToZeroTimer.visibility = View.GONE
             binding.imgMask.visibility = View.GONE
+            isInitialCountDownRunning = false
             startCaptureVideo()
         }
     }
@@ -164,7 +175,7 @@ class CameraFragment : BaseDockFragment() {
     private val countdownTimerAnswerDurationLeft = object : CountDownTimer(11000, 1000) {
 
         override fun onTick(millisUntilFinished: Long) {
-            countDownFormatting(millisUntilFinished, binding.tvAnswerDurationTimer)
+            myDockActivity?.countDownFormatting(requireContext(), millisUntilFinished, binding.tvAnswerDurationTimer)
         }
 
         override fun onFinish() {
@@ -174,21 +185,10 @@ class CameraFragment : BaseDockFragment() {
         }
     }
 
-    // AMMAR - Method to format countdown time to display it properly and to turn text red when there are less than 10 secs left
-    private fun countDownFormatting(millisUntilFinished: Long, textView: TextView) {
-        val secondsRemaining = millisUntilFinished / 1000
-        val minutes = secondsRemaining / 60
-        val seconds = secondsRemaining % 60
-        val formattedTime = String.format("%02d:%02d", minutes, seconds)
-        if (seconds <= 10) {
-            textView.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark))
-        }
-        textView.text = formattedTime
-    }
-
     // AMMAR - Method to capture and save video and audio
     private fun captureVideo() {
         binding.captureButton.setImageResource(R.drawable.round_stop_circle_24)
+        binding.captureButton.visibility = View.VISIBLE
         val recording1 = recording
         // AMMAR - Here we stop the recording if video is being recorded else we start the recording
         if (recording1 != null) {
@@ -217,14 +217,20 @@ class CameraFragment : BaseDockFragment() {
                         binding.captureButton.isEnabled = true
                     } else if (videoRecordEvent is Finalize) {
                         if (!videoRecordEvent.hasError()) {
-//                            val msg = "Video capture succeeded: " + videoRecordEvent.outputResults.outputUri
-                            val msg = "Video successfully captured!"
-                            myDockActivity?.showSuccessSnackBar(requireView(), requireContext(), msg)
+                            val msg = "Video capture succeeded: " + videoRecordEvent.outputResults.outputUri
+//                            myDockActivity?.showSuccessSnackBar(requireView(), requireContext(), msg)
+                            // AMMAR - Here we show the dialog to redo answer or continue
+                            val showRecordingCompletedDialog = RecordingCompletedDialogFragment(this, redoLeft, myDockActivity!!)
+                            showRecordingCompletedDialog.show(childFragmentManager, Constants.SHOW_DIALOG)
                         } else {
-                            recording!!.close()
-                            recording = null
-                            val msg = "Error: " + videoRecordEvent.error
-                            myDockActivity?.showErrorSnackBar(requireView(), requireContext(), msg)
+                            try {
+                                recording!!.close()
+                                recording = null
+                                val msg = "Error: " + videoRecordEvent.error
+                                myDockActivity?.showErrorSnackBar(requireView(), requireContext(), msg)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
                         binding.captureButton.setImageResource(R.drawable.round_fiber_manual_record_24)
                     }
@@ -269,6 +275,21 @@ class CameraFragment : BaseDockFragment() {
             }
         } else {
             myDockActivity?.showErrorSnackBar(requireView(), requireContext(),"Flash is not available currently")
+        }
+    }
+
+    override fun <T> onClick(data: T, type: String, createNested: Boolean) {
+        when (data) {
+            Constants.QUES_START_RECORDING -> {
+                // AMMAR - Here we start the initial countdown
+                countdownTimerFiveTillZero.start()
+                isInitialCountDownRunning = true
+            }
+            Constants.REC_COMPLETED_REDO -> {
+                redoLeft = 0
+                countdownTimerFiveTillZero.start()
+                isInitialCountDownRunning = true
+            }
         }
     }
 }

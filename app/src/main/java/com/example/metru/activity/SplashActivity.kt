@@ -1,7 +1,11 @@
 package com.example.metru.activity
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.metru.R
 import com.example.metru.databinding.ActivitySplashBinding
@@ -25,16 +29,13 @@ class SplashActivity : AppCompatActivity() {
 
         Dexter.withContext(this)
             .withPermissions(
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.READ_CONTACTS,
-                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.CAMERA,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
             ).withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport) { /* ... */
-                  //  logoAnimation()
+                    logoAnimation()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
@@ -44,22 +45,19 @@ class SplashActivity : AppCompatActivity() {
                 }
             }).check()
 
-
-
-
     }
 
-//    private fun logoAnimation() {
-//        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-//            binding.imgLogo.visibility = View.GONE
-//            nextView()
-//        }, TIME_OUT)
-//    }
-
+    private fun logoAnimation() {
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            nextView()
+        }, TIME_OUT)
+    }
 
     private fun nextView() {
         val sharedPrefManager = SharedPrefManager(this)
 
+        startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+        finish()
     }
 }

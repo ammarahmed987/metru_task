@@ -39,12 +39,12 @@
 
         </activity>
         <activity
-            android:name="com.example.metru.activity.SplashActivity"
+            android:name="com.example.metru.activity.MainActivity"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name="com.example.metru.activity.MainActivity"
+            android:name="com.example.metru.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true">
 

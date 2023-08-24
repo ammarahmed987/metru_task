@@ -3,12 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/bg_countdown_box.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/bg_gradient.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/bg_snackbar_error.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/bg_snackbar_success.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/ic_chat_icon.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/ic_close.xml" value="0.1695" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/ic_feed.xml" value="0.124" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/round_fiber_manual_record_24.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/round_flash_off_24.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/round_flash_on_24.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/round_flip_camera_android_24.xml" value="0.1695" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/round_stop_circle_24.xml" value="0.1695" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/drawable/white_bg.xml" value="0.124" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/activity_login.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/activity_main.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/activity_splash.xml" value="0.11302083333333333" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/activity_welcome_login.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/app_bar_main.xml" value="0.152" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/fragment_camera.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/layout/fragment_welcome.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/hp/AndroidStudioProjects/FreelanceProjects/metru/app/src/main/res/menu/toolbar_menu.xml" value="0.2" />
       </map>
     </option>

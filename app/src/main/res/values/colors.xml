@@ -22,5 +22,9 @@
     <color name="pie_yellow">#FADB6E</color>
     <color name="pie_red">#F46666</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#EEEEEE</color>
+    <color name="banner_success_color">#448C26</color>
+    <color name="banner_error_color">#ff0033</color>
+    <color name="snack_bar_success_green">#36701e</color>
+    <color name="snack_bar_error_red">#cc0029</color>
 
 </resources>

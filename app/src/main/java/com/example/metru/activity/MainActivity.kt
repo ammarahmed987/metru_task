@@ -71,6 +71,7 @@ class MainActivity : DockActivity(){
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             binding.appBarMain.title.text = destination.label
         }
+        supportActionBar?.hide()
     }
 
 }

@@ -6,10 +6,14 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.tapadoo.alerter.Alerter
@@ -21,6 +25,8 @@ import com.example.metru.room.RoomHelper
 import com.example.metru.utils.InternetHelper
 import com.example.metru.utils.SharedPrefManager
 import com.example.metru.viewModel.UserViewModel
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import java.util.*
 import javax.inject.Inject
@@ -180,8 +186,42 @@ abstract class DockActivity : DaggerAppCompatActivity(), ProgressIndicator {
         )
     }
 
-//    fun closeDrawer() {
-//        drawer_layout.closeDrawer(GravityCompat.START)
-//    }
+    fun showErrorSnackBar(currentView: View, context: Context, message: String, snackBarDuration: Int = 3000) {
+        val snackBarView = Snackbar.make(currentView, message , Snackbar.LENGTH_INDEFINITE).setDuration(snackBarDuration)
+        val view = snackBarView.view
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        params.marginStart = resources.getDimensionPixelSize(R.dimen.snackbar_horizontal_margin)
+        params.marginEnd = resources.getDimensionPixelSize(R.dimen.snackbar_horizontal_margin)
+        view.layoutParams = params
+        view.background = ContextCompat.getDrawable(context,R.drawable.bg_snackbar_error) // for custom background
+        snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+        val messageView = snackBarView.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+        messageView.setTextColor(ContextCompat.getColor(context, R.color.white))
+        messageView.maxLines = 10
+        snackBarView.setAction("X") {
+            snackBarView.dismiss()
+        }.setActionTextColor(ContextCompat.getColor(context, R.color.white))
+        snackBarView.show()
+    }
+
+    fun showSuccessSnackBar(currentView: View, context: Context, message: String, snackBarDuration: Int = 3000) {
+        val snackBarView = Snackbar.make(currentView, message , Snackbar.LENGTH_INDEFINITE).setDuration(snackBarDuration)
+        val view = snackBarView.view
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        params.marginStart = resources.getDimensionPixelSize(R.dimen.snackbar_horizontal_margin)
+        params.marginEnd = resources.getDimensionPixelSize(R.dimen.snackbar_horizontal_margin)
+        view.layoutParams = params
+        view.background = ContextCompat.getDrawable(context,R.drawable.bg_snackbar_success) // for custom background
+        snackBarView.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+        val messageView = snackBarView.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+        messageView.setTextColor(ContextCompat.getColor(context, R.color.white))
+        messageView.maxLines = 10
+        snackBarView.setAction("X") {
+            snackBarView.dismiss()
+        }.setActionTextColor(ContextCompat.getColor(context, R.color.white))
+        snackBarView.show()
+    }
 
 }

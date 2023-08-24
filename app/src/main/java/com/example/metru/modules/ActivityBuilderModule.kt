@@ -15,10 +15,4 @@ interface ActivityBuilderModule {
 
     @ContributesAndroidInjector(modules = [FragmentBuilderModule::class])
     fun contributeMainActivity(): MainActivity
-
-    @ContributesAndroidInjector(modules = [FragmentBuilderModule::class])
-    fun contributeLoginActivity(): LoginActivity
-
-    @ContributesAndroidInjector(modules = [FragmentBuilderModule::class])
-    fun contributeWelcomeLoginActivity(): WelcomeLoginActivity
 }

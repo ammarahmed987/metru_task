@@ -1,11 +1,9 @@
 package com.example.metru.modules
 
 import com.example.metru.base.BaseDockFragment
-import com.example.metru.fragment.*
-import com.example.metru.fragment.blankFragment.BlankFragment
+import com.example.metru.fragment.blankFragment.CameraFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-
 
 /**
  *  @author Abdullah Nagori
@@ -19,9 +17,6 @@ FragmentBuilderModule {
     fun contributeBaseFragment(): BaseDockFragment
 
     @ContributesAndroidInjector
-    fun contributeWelcomeLoginFragment(): WelcomeLoginFragment
-
-    @ContributesAndroidInjector
-    fun contributeBlankFragment(): BlankFragment
+    fun contributeCameraFragment(): CameraFragment
 
 }

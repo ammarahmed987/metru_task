@@ -2,7 +2,9 @@
     <string name="app_name">Metru</string>
     <string name="nav_header_desc">TODO</string>
     <string name="nav_header_title">Ammar</string>
-    <string name="nav_header_title_toolbar">Architecture</string>
+    <string name="nav_header_title_toolbar">Toolbar</string>
+    <string name="nav_camera_rest_timer">00:30</string>
+
 
     <string name="Home">Dashboard</string>
     <string name="Projects">Projects</string>

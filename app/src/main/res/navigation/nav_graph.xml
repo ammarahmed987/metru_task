@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/nav_blank_fragment">
+    app:startDestination="@id/nav_camera_fragment">
 
     <fragment
-        android:id="@+id/nav_blank_fragment"
-        android:name="com.example.metru.fragment.blankFragment.BlankFragment"
+        android:id="@+id/nav_camera_fragment"
+        android:name="com.example.metru.fragment.blankFragment.CameraFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_blank"/>
+        tools:layout="@layout/fragment_camera"/>
 
 </navigation>

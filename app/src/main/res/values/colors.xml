@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorAccent">#fabc60</color>
+    <color name="colorPrimary">#35a49d</color>
+    <color name="colorPrimaryDark">#20625e</color>
+    <color name="colorDivider">#01082E</color>
+    <color name="zxing_transparent">#00000000</color>
+    <color name="banner_green_color">#448C26</color>
+    <color name="error_color">#ff0033</color>
+    <color name="black">#000000</color>
+    <color name="textLightBlack">#303030</color>
+    <color name="blue">#1DA9E7</color>
+    <color name="light_gray">#F4F5F7</color>
+    <color name="green">#7BBE4B</color>
+    <color name="orange">#EB9B3F</color>
+    <color name="darkGray">#87888F</color>
+    <color name="lineColor">#EEEEEE</color>
+    <color name="gradient_start_color">#2A3F50</color>
+    <color name="gradient_end_color">#37C3B8</color>
+    <color name="pie_blue">#7AA7EA</color>
+    <color name="pie_yellow">#FADB6E</color>
+    <color name="pie_red">#F46666</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#EEEEEE</color>
+
+</resources>

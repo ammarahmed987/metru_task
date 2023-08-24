@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_login">
+
+    <fragment
+        android:id="@+id/welcome_login"
+        android:name="example.metru.fragment.WelcomeLoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/welcome_login_fragment">
+
+        <action
+            android:id="@+id/action_welcomeloginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_welcomeloginFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="example.metru.fragment.LoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment"/>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="example.metru.fragment.RegisterFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/register_fragment"/>
+</navigation>

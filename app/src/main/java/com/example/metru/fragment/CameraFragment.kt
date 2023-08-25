@@ -1,9 +1,9 @@
 package com.example.metru.fragment
 
 import android.Manifest
-import com.example.metru.R
 import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -11,7 +11,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
@@ -20,6 +19,7 @@ import androidx.camera.video.*
 import androidx.camera.video.VideoRecordEvent.Finalize
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.metru.R
 import com.example.metru.activity.MainActivity
 import com.example.metru.base.BaseDockFragment
 import com.example.metru.base.ClickListener
@@ -46,13 +46,8 @@ class CameraFragment : BaseDockFragment(), ClickListener {
     private var recording: Recording? = null
     private var videoCapture: VideoCapture<Recorder>? = null
     private var cameraFacing = CameraSelector.LENS_FACING_FRONT
-    private var isInitialCountDownRunning = false
     private var redoLeft = 1
-//    private val permissionRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-//        if (isGranted) {
-//            startCamera(cameraFacing)
-//        }
-//    }
+    private lateinit var recordingUri: Uri
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,21 +56,11 @@ class CameraFragment : BaseDockFragment(), ClickListener {
         // Inflate the layout for this fragment
         initView()
 
-        // AMMAR - Here we show the question
+        // AMMAR - Here we show the question via QuestionDialogFragment
         val showQuestion = QuestionDialogFragment(this)
         showQuestion.show(childFragmentManager, Constants.SHOW_DIALOG)
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.viewFinder.post {
-            startCamera(cameraFacing)
-        }
-
-        service = Executors.newSingleThreadExecutor()
     }
 
     private fun initView() {
@@ -94,23 +79,33 @@ class CameraFragment : BaseDockFragment(), ClickListener {
                     binding.tvAnswerDurationTimer.text = getString(R.string.nav_camera_rest_timer)
                     captureVideo()
                 } else {
-//                    startCaptureVideo()
-                    if (!isInitialCountDownRunning) {
-                        countdownTimerFiveTillZero.start()
-                        isInitialCountDownRunning = true
-                    }
+                    countdownTimerFiveTillZero.start()
                 }
             }
             it.flipCameraButton.setOnClickListener {
                 // AMMAR - reverses camera on given current facing
-                cameraFacing = if (cameraFacing == CameraSelector.LENS_FACING_BACK) {
-                    CameraSelector.LENS_FACING_FRONT
+                if (recording != null) {
+                    myDockActivity?.showErrorSnackBar(requireView(), requireContext(), "Sorry! You cannot change view during recording.")
                 } else {
-                    CameraSelector.LENS_FACING_BACK
+                    cameraFacing = if (cameraFacing == CameraSelector.LENS_FACING_BACK) {
+                        CameraSelector.LENS_FACING_FRONT
+                    } else {
+                        CameraSelector.LENS_FACING_BACK
+                    }
+                    startCamera(cameraFacing)
                 }
-                startCamera(cameraFacing)
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.viewFinder.post {
+            startCamera(cameraFacing)
+        }
+
+        service = Executors.newSingleThreadExecutor()
     }
 
     // AMMAR - Method to check whether permissions have been granted or not
@@ -154,25 +149,26 @@ class CameraFragment : BaseDockFragment(), ClickListener {
     }
 
     // AMMAR - Countdown object for the initial countdown
-    private val countdownTimerFiveTillZero = object : CountDownTimer(6000, 1000) {
+    private val countdownTimerFiveTillZero = object : CountDownTimer(Constants.COUNTDOWN_PRIMARY_TIMER_DURATION, Constants.COUNTDOWN_INTERVAL) {
 
         override fun onTick(millisUntilFinished: Long) {
             binding.tvFiveToZeroTimer.text = (millisUntilFinished / 1000).toString()
             binding.tvFiveToZeroTimer.visibility = View.VISIBLE
             binding.imgMask.visibility = View.VISIBLE
+            binding.tvTakeADeepBreath.visibility = View.VISIBLE
             binding.captureButton.visibility = View.GONE
         }
 
         override fun onFinish() {
             binding.tvFiveToZeroTimer.visibility = View.GONE
             binding.imgMask.visibility = View.GONE
-            isInitialCountDownRunning = false
+            binding.tvTakeADeepBreath.visibility = View.GONE
             startCaptureVideo()
         }
     }
 
     // AMMAR - Countdown object to give answer
-    private val countdownTimerAnswerDurationLeft = object : CountDownTimer(11000, 1000) {
+    private val countdownTimerAnswerDurationLeft = object : CountDownTimer(Constants.COUNTDOWN_SECONDARY_TIMER_DURATION, Constants.COUNTDOWN_INTERVAL) {
 
         override fun onTick(millisUntilFinished: Long) {
             myDockActivity?.countDownFormatting(requireContext(), millisUntilFinished, binding.tvAnswerDurationTimer)
@@ -203,7 +199,9 @@ class CameraFragment : BaseDockFragment(), ClickListener {
         val contentValues = ContentValues()
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
-        contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/CameraX-Video")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/CameraX-Video")
+        }
         val options = MediaStoreOutputOptions.Builder(requireContext().contentResolver, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             .setContentValues(contentValues).build()
 
@@ -217,10 +215,11 @@ class CameraFragment : BaseDockFragment(), ClickListener {
                         binding.captureButton.isEnabled = true
                     } else if (videoRecordEvent is Finalize) {
                         if (!videoRecordEvent.hasError()) {
-                            val msg = "Video capture succeeded: " + videoRecordEvent.outputResults.outputUri
+//                            val msg = "Video capture succeeded: " + videoRecordEvent.outputResults.outputUri
 //                            myDockActivity?.showSuccessSnackBar(requireView(), requireContext(), msg)
+                            recordingUri = videoRecordEvent.outputResults.outputUri
                             // AMMAR - Here we show the dialog to redo answer or continue
-                            val showRecordingCompletedDialog = RecordingCompletedDialogFragment(this, redoLeft, myDockActivity!!)
+                            val showRecordingCompletedDialog = RecordingCompletedDialogFragment(this, redoLeft, myDockActivity!!, videoRecordEvent.outputResults.outputUri)
                             showRecordingCompletedDialog.show(childFragmentManager, Constants.SHOW_DIALOG)
                         } else {
                             try {
@@ -231,8 +230,10 @@ class CameraFragment : BaseDockFragment(), ClickListener {
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
+                            countdownTimerAnswerDurationLeft.cancel()
                         }
-                        binding.captureButton.setImageResource(R.drawable.round_fiber_manual_record_24)
+                        binding.captureButton.visibility = View.GONE
+//                        binding.captureButton.setImageResource(R.drawable.round_fiber_manual_record_24)
                     }
                 }
     }
@@ -244,16 +245,22 @@ class CameraFragment : BaseDockFragment(), ClickListener {
         processCameraProvider.addListener({
             try {
                 val cameraProvider: ProcessCameraProvider = processCameraProvider.get()
+
                 val preview: Preview = Preview.Builder().build()
                 preview.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+
                 val recorder: Recorder = Recorder.Builder()
                     .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
                     .build()
                 videoCapture = VideoCapture.withOutput(recorder)
+
                 cameraProvider.unbindAll()
                 val cameraSelector = CameraSelector.Builder()
                     .requireLensFacing(cameraFacing).build()
                 val camera: Camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, videoCapture)
+
+                binding.viewFinder.scaleX = -1f
+
                 binding.toggleFlash.setOnClickListener { view -> toggleFlash(camera) }
             } catch (e: ExecutionException) {
                 e.printStackTrace()
@@ -280,15 +287,16 @@ class CameraFragment : BaseDockFragment(), ClickListener {
 
     override fun <T> onClick(data: T, type: String, createNested: Boolean) {
         when (data) {
+            // AMMAR - We are coming here from the QuestionDialogFragment
+            // AMMAR - Here we start the initial countdown
             Constants.QUES_START_RECORDING -> {
-                // AMMAR - Here we start the initial countdown
                 countdownTimerFiveTillZero.start()
-                isInitialCountDownRunning = true
             }
+            // AMMAR - We are coming here from the RecordingCompletedDialogFragment
+            // AMMAR - Here we set redo to zero and start the initial countdown
             Constants.REC_COMPLETED_REDO -> {
                 redoLeft = 0
                 countdownTimerFiveTillZero.start()
-                isInitialCountDownRunning = true
             }
         }
     }

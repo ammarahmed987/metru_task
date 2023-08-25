@@ -1,16 +1,14 @@
 package com.example.metru.fragment.dialogs
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.example.metru.R
 import com.example.metru.activity.DockActivity
 import com.example.metru.base.BaseDialogFragment
@@ -18,9 +16,11 @@ import com.example.metru.base.ClickListener
 import com.example.metru.constant.Constants
 import com.example.metru.databinding.FragmentRecordingCompletedDialogBinding
 
-class RecordingCompletedDialogFragment(private val listener: ClickListener, private val redoLeft: Int, private val newDockActivity: DockActivity) : BaseDialogFragment() {
+class RecordingCompletedDialogFragment(private val listener: ClickListener, private val redoLeft: Int,
+                                       private val newDockActivity: DockActivity, private val recordingUri: Uri) : BaseDialogFragment() {
 
     private lateinit var binding: FragmentRecordingCompletedDialogBinding
+    private val bundle = Bundle()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,20 +54,27 @@ class RecordingCompletedDialogFragment(private val listener: ClickListener, priv
             it.btnContinue.setOnClickListener {
                 countdownTimerRedoAnswer.cancel()
                 dialog?.dismiss()
-                navigateToFragment(R.id.action_nav_camera_fragment_to_nav_play_recording_fragment)
+
+                bundle.putString(Constants.REC_COMPLETED_RECORDING_URI, recordingUri.toString())
+                navigateToFragment(R.id.action_nav_camera_fragment_to_nav_play_recording_fragment, bundle)
             }
         }
     }
 
     // AMMAR - Countdown object to give answer
-    private val countdownTimerRedoAnswer = object : CountDownTimer(11000, 1000) {
+    private val countdownTimerRedoAnswer = object : CountDownTimer(Constants.COUNTDOWN_SECONDARY_TIMER_DURATION, Constants.COUNTDOWN_INTERVAL) {
 
         override fun onTick(millisUntilFinished: Long) {
-            newDockActivity.countDownFormatting(requireContext(), millisUntilFinished, binding.tvRedoAnswer)
+            try {
+                newDockActivity.countDownFormatting(requireContext(), millisUntilFinished, binding.tvRedoAnswer)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         override fun onFinish() {
-            navigateToFragment(R.id.action_nav_camera_fragment_to_nav_play_recording_fragment)
+            bundle.putString(Constants.REC_COMPLETED_RECORDING_URI, recordingUri.toString())
+            navigateToFragment(R.id.action_nav_camera_fragment_to_nav_play_recording_fragment, bundle)
         }
     }
 

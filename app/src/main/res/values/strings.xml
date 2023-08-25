@@ -16,11 +16,12 @@
 
 
     <string name="nav_camera_rest_timer">00:30</string>
+    <string name="nav_camera_dummy_init_timer">5</string>
+    <string name="nav_camera_take_breath">Take a deep breath…</string>
 
     <string name="nav_question_q1">Question number 1</string>
     <string name="nav_question_q1_question">Why are you the right person for the job?</string>
     <string name="nav_question_start_recording">Record your answer</string>
-
 
     <string name="nav_rec_completed_submit_text">Answer recorded! Do you want to answer again or proceed?</string>
     <string name="nav_rec_completed_redo">Redo (%1$d)</string>

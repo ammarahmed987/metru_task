@@ -12,6 +12,8 @@ object Constants {
 
     //      DIALOG CONSTANTS
     const val SHOW_DIALOG : String = "SHOW_DIALOG"
+    const val DIALOG_FROM_RECORDING_COMPLETED : String = "DIALOG_FROM_RECORDING_COMPLETED"
+    const val DIALOG_FROM_CAMERA : String = "DIALOG_FROM_CAMERA"
 
     //      QUESTIONS CONSTANTS
     const val QUES_START_RECORDING : String = "QUES_START_RECORDING"

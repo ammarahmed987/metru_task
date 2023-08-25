@@ -17,7 +17,7 @@ import com.example.metru.constant.Constants
 import com.example.metru.databinding.FragmentRecordingCompletedDialogBinding
 
 class RecordingCompletedDialogFragment(private val listener: ClickListener, private val redoLeft: Int,
-                                       private val newDockActivity: DockActivity, private val recordingUri: Uri) : BaseDialogFragment() {
+                                       private val newDockActivity: DockActivity, private val recordingUri: Uri) : BaseDialogFragment(), ClickListener {
 
     private lateinit var binding: FragmentRecordingCompletedDialogBinding
     private val bundle = Bundle()
@@ -58,6 +58,10 @@ class RecordingCompletedDialogFragment(private val listener: ClickListener, priv
                 bundle.putString(Constants.REC_COMPLETED_RECORDING_URI, recordingUri.toString())
                 navigateToFragment(R.id.action_nav_camera_fragment_to_nav_play_recording_fragment, bundle)
             }
+            it.imgBtnShowQuestion.setOnClickListener {
+                val showQuestion = QuestionDialogFragment(this, Constants.DIALOG_FROM_RECORDING_COMPLETED)
+                showQuestion.show(childFragmentManager, Constants.SHOW_DIALOG)
+            }
         }
     }
 
@@ -86,5 +90,9 @@ class RecordingCompletedDialogFragment(private val listener: ClickListener, priv
 //        params?.height = ViewGroup.LayoutParams.MATCH_PARENT
         dialog?.window?.attributes = params as WindowManager.LayoutParams
         dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    override fun <T> onClick(data: T, type: String, createNested: Boolean) {
+        TODO("Not yet implemented")
     }
 }

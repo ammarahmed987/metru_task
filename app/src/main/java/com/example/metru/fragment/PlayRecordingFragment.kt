@@ -3,6 +3,7 @@ package com.example.metru.fragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import androidx.media3.common.MediaItem
@@ -34,6 +35,8 @@ class PlayRecordingFragment : BaseDockFragment() {
         initView()
 
         playerView = binding.playerView
+        // AMMAR - Applying a mirroring transform to the TextureView
+        playerView.setVideoTextureViewMirror()
 
         return binding.root
     }
@@ -43,6 +46,13 @@ class PlayRecordingFragment : BaseDockFragment() {
         (activity as MainActivity).supportActionBar?.hide()
         // AMMAR - Extracting the recording uri from the bundle
         recordingUri = arguments?.getString(Constants.REC_COMPLETED_RECORDING_URI).toString()
+    }
+
+    // AMMAR - To prevent video mirroring/flipping
+    private fun PlayerView.setVideoTextureViewMirror() {
+        if (videoSurfaceView is TextureView) {
+            (videoSurfaceView as TextureView).scaleX = -1f
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

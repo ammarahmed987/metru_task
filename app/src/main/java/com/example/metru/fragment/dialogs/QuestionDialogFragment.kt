@@ -12,7 +12,7 @@ import com.example.metru.base.ClickListener
 import com.example.metru.constant.Constants
 import com.example.metru.databinding.FragmentQuestionDialogBinding
 
-class QuestionDialogFragment(private val listener: ClickListener) : BaseDialogFragment() {
+class QuestionDialogFragment(private val listener: ClickListener, private val fromWhere: String = Constants.DIALOG_FROM_CAMERA) : BaseDialogFragment() {
 
     private lateinit var binding: FragmentQuestionDialogBinding
 
@@ -29,12 +29,19 @@ class QuestionDialogFragment(private val listener: ClickListener) : BaseDialogFr
     private fun initView() {
         binding = FragmentQuestionDialogBinding.inflate(layoutInflater)
         setOnClickListener()
+        if (fromWhere == Constants.DIALOG_FROM_RECORDING_COMPLETED) {
+            binding.btnRecord.visibility = View.GONE
+            binding.imgBtnShowQuestion.visibility = View.VISIBLE
+        }
     }
 
     private fun setOnClickListener() {
         binding.let {
             it.btnRecord.setOnClickListener {
                 listener.onClick(data = Constants.QUES_START_RECORDING)
+                dialog?.dismiss()
+            }
+            it.imgBtnShowQuestion.setOnClickListener {
                 dialog?.dismiss()
             }
         }

@@ -45,7 +45,7 @@
                 android:src="@drawable/ic_baseline_cancel_24"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="@color/colorPrimaryDark"
-                android:visibility="gonxe"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="@+id/constraint_inq_img1"
                 app:layout_constraintBottom_toBottomOf="@+id/constraint_inq_img1"
                 app:layout_constraintEnd_toEndOf="parent"/>

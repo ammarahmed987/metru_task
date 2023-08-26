@@ -12,7 +12,9 @@ import com.example.metru.base.ClickListener
 import com.example.metru.constant.Constants
 import com.example.metru.databinding.FragmentQuestionDialogBinding
 
-class QuestionDialogFragment(private val listener: ClickListener, private val fromWhere: String = Constants.DIALOG_FROM_CAMERA) : BaseDialogFragment() {
+class QuestionDialogFragment(private val listener: ClickListener,
+                             private val fromWhere: String = Constants.DIALOG_FROM_CAMERA
+) : BaseDialogFragment() {
 
     private lateinit var binding: FragmentQuestionDialogBinding
 

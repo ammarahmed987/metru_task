@@ -58,6 +58,7 @@ class CameraFragment : BaseDockFragment(), ClickListener {
 
         // AMMAR - Here we show the question via QuestionDialogFragment
         val showQuestion = QuestionDialogFragment(this)
+        showQuestion.isCancelable = false
         showQuestion.show(childFragmentManager, Constants.SHOW_DIALOG)
 
         return binding.root
@@ -219,7 +220,9 @@ class CameraFragment : BaseDockFragment(), ClickListener {
 //                            myDockActivity?.showSuccessSnackBar(requireView(), requireContext(), msg)
                             recordingUri = videoRecordEvent.outputResults.outputUri
                             // AMMAR - Here we show the dialog to redo answer or continue
-                            val showRecordingCompletedDialog = RecordingCompletedDialogFragment(this, redoLeft, myDockActivity!!, videoRecordEvent.outputResults.outputUri)
+                            val showRecordingCompletedDialog = RecordingCompletedDialogFragment(this,
+                                redoLeft, myDockActivity!!, videoRecordEvent.outputResults.outputUri)
+                            showRecordingCompletedDialog.isCancelable = false
                             showRecordingCompletedDialog.show(childFragmentManager, Constants.SHOW_DIALOG)
                         } else {
                             try {

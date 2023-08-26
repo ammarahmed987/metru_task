@@ -60,6 +60,7 @@ class RecordingCompletedDialogFragment(private val listener: ClickListener, priv
             }
             it.imgBtnShowQuestion.setOnClickListener {
                 val showQuestion = QuestionDialogFragment(this, Constants.DIALOG_FROM_RECORDING_COMPLETED)
+                showQuestion.isCancelable = false
                 showQuestion.show(childFragmentManager, Constants.SHOW_DIALOG)
             }
         }

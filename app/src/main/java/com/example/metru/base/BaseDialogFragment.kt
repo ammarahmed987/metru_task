@@ -19,7 +19,7 @@ import com.example.metru.utils.UtilHelper
 import com.example.metru.utils.ValidationHelper
 import javax.inject.Inject
 
-open class BaseDialogFragment : DialogFragment(),BaseView, ProgressIndicator, ApiListener {
+open class BaseDialogFragment : DialogFragment(), BaseView, ProgressIndicator, ApiListener {
 
     @Inject
     lateinit var sharedPrefManager: SharedPrefManager
